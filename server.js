@@ -5,7 +5,8 @@ var express = require('express'),
     engines = require('consolidate'),
     assert = require('assert'),
     ObjectId = require('mongodb').ObjectID,
-    url = 'mongodb://localhost:27017/simplemean';
+//    url = 'mongodb://localhost:27017/simplemean';
+    url = 'mongodb://dbadmin:abc123456789@docdb-simpleapp.c7vsj7mhzsc8.ap-southeast-1.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false';
 
 app.use(express.static(__dirname + "/public"));
 
