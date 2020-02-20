@@ -1,4 +1,4 @@
-angular.module('app', []);
+angular.module('app', ['ui.bootstrap']);
 
 angular
     .module('app')
@@ -15,20 +15,28 @@ function AppCtrl($scope, $http) {
     ];
     vm.record = {};
     vm.records = [];
-
+    $scope.currentPage = 1;
+    $scope.maxSize = 10; // max number of buttons
+    
     vm.handleError = function(response) {
         console.log(response.status + " - " + response.statusText + " - " + response.data);
     }
 
-    vm.getAllRecords = function() {
-        $http.get('/records').then(function(response){
-            vm.records = response.data;
+    // Get records on current page
+    vm.getRecords = function() {
+        $http.get('/records?page=' + $scope.currentPage).then(function(response){
+            vm.data = response.data;
         }, function(response){
             vm.handleError(response);
         });
     }
 
-    vm.getAllRecords();
+    // Update view when page changes
+    $scope.pageChanged = function() {
+        vm.getRecords();
+    }
+
+    vm.getRecords();
 
     vm.editMode = false;
     vm.saveRecord = function() {
@@ -43,7 +51,7 @@ function AppCtrl($scope, $http) {
         console.log(vm.record);
         $http.post('/records', vm.record).then(function(response){
             vm.record = {};
-            vm.getAllRecords();
+            vm.getRecords();
         }, function(response){
             vm.handleError(response);
         });
@@ -52,7 +60,7 @@ function AppCtrl($scope, $http) {
     vm.updateRecord = function() {
         $http.put('/records/' + vm.record._id, vm.record).then(function(response){
             vm.record = {};
-            vm.getAllRecords();
+            vm.getRecords();
             vm.editMode = false;
         }, function(response){
             vm.handleError(response);
@@ -67,7 +75,7 @@ function AppCtrl($scope, $http) {
     vm.deleteRecord = function(recordid) {
         $http.delete('/records/'+recordid).then(function(response){
             console.log("Deleted");
-            vm.getAllRecords();
+            vm.getRecords();
         }, function(response){
             vm.handleError(response);
         })
@@ -76,7 +84,7 @@ function AppCtrl($scope, $http) {
     vm.cancelEdit = function() {
         vm.editMode = false;
         vm.record = {};
-        vm.getAllRecords();
+        vm.getRecords();
     }
 
 }
