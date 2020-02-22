@@ -213,7 +213,7 @@ async function main(){
         });
     
         app.use(errorHandler);
-        var server = app.listen(process.env.PORT || 3000, function() {
+        var server = app.listen(80, "0.0.0.0", function() {
             var port = server.address().port;
             console.log('Express server listening on port %s.', port);
         })
